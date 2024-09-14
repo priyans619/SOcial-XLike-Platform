@@ -3,7 +3,15 @@ import { useAuth } from '../context/AuthContext';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
+  };
 
   return (
     <nav className="bg-gray-50 border-b-0 shadow-md p-4 flex justify-between items-center">
@@ -29,6 +37,9 @@ const Navbar = () => {
         >
           Profile
         </NavLink>
+        <button onClick={handleLogout} className="text-black">
+          Logout
+        </button>
       </div>
     </nav>
   );
