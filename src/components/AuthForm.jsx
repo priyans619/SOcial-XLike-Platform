@@ -17,6 +17,11 @@ const AuthForm = ({ isLogin }) => {
     e.preventDefault();
     setError(null);
 
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
