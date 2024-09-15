@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import Posts from '../components/Posts';
 
 const Profile = ({ postCount, fetchCounts }) => {
   const { currentUser } = useAuth();
@@ -90,6 +91,10 @@ const Profile = ({ postCount, fetchCounts }) => {
             Following
           </button>
         </nav>
+      </div>
+
+      <div className="mt-4">
+        {activeTab === 'posts' && <Posts />}
       </div>
     </div>
   );
