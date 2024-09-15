@@ -91,7 +91,12 @@ const Users = () => {
                 </div>
                 <button
                   onClick={() => handleFollow(user.id)}
+                  className={`py-1 px-6 rounded ${
+                    followedUsers.includes(user.id) ? 'bg-grey-50 text-black' : 'bg-[#f07499] text-white'
+                  }`}
+                  disabled={followedUsers.includes(user.id)}
                 >
+                  {followedUsers.includes(user.id) ? 'Following' : 'Follow'}
                 </button>
               </div>
               <hr className="border-gray-300 mt-10" />
