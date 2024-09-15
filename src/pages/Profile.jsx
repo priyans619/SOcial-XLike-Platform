@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Posts from '../components/Posts';
+import Followers from '../components/Followers';
+import Following from '../components/Following';
 
 const Profile = ({ postCount, fetchCounts }) => {
   const { currentUser } = useAuth();
@@ -95,6 +97,8 @@ const Profile = ({ postCount, fetchCounts }) => {
 
       <div className="mt-4">
         {activeTab === 'posts' && <Posts />}
+        {activeTab === 'followers' && <Followers />}
+        {activeTab === 'following' && <Following />}
       </div>
     </div>
   );
