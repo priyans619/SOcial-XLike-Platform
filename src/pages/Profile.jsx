@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-const Profile = ({ postCount}) => {
+const Profile = ({ postCount, fetchCounts }) => {
   const { currentUser } = useAuth();
+  const [activeTab, setActiveTab] = useState('posts');
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+
+  useEffect(() => {
+    if (currentUser) {
+      const fetchFollowerAndFollowingCounts = async () => {
+        // Fetch followers count
+        const followersQuery = query(collection(db, 'followers'), where('followingId', '==', currentUser.uid));
+        const followersSnapshot = await getDocs(followersQuery);
+        setFollowerCount(followersSnapshot.size);
+
+        // Fetch following count
+        const followingQuery = query(collection(db, 'following'), where('userId', '==', currentUser.uid));
+        const followingSnapshot = await getDocs(followingQuery);
+        setFollowingCount(followingSnapshot.size);
+      };
+
+      fetchCounts();  // Fetch post count
+      fetchFollowerAndFollowingCounts(); // Fetch followers and following count
+    }
+  }, [currentUser, fetchCounts]);
 
   return (
     <div className="max-w-xl mx-auto p-4">
@@ -30,6 +54,42 @@ const Profile = ({ postCount}) => {
           <span className="">Following:</span>
           <span className="ml-1">{followingCount}</span>
         </div>
+      </div>
+
+      <div className="relative mt-12">
+        <div className="absolute inset-x-0 top-0 h-0.5 bg-gray-200"></div>
+        <nav className="flex justify-center gap-16">
+          <button
+            onClick={() => setActiveTab('posts')}
+            className={`relative py-2 px-2 focus:outline-none ${activeTab === 'posts' ? 'text-gray-600' : 'text-gray-400'
+              }`}
+          >
+            {activeTab === 'posts' && (
+              <div className="absolute inset-x-0 -top-0.5 h-0.5 bg-gray-500"></div>
+            )}
+            Posts
+          </button>
+          <button
+            onClick={() => setActiveTab('followers')}
+            className={`relative py-2 px-2 focus:outline-none ${activeTab === 'followers' ? 'text-gray-600' : 'text-gray-400'
+              }`}
+          >
+            {activeTab === 'followers' && (
+              <div className="absolute inset-x-0 -top-0.5 h-0.5 bg-gray-500"></div>
+            )}
+            Followers
+          </button>
+          <button
+            onClick={() => setActiveTab('following')}
+            className={`relative py-2 px-2 focus:outline-none ${activeTab === 'following' ? 'text-gray-600' : 'text-gray-400'
+              }`}
+          >
+            {activeTab === 'following' && (
+              <div className="absolute inset-x-0 -top-0.5 h-0.5 bg-gray-500"></div>
+            )}
+            Following
+          </button>
+        </nav>
       </div>
     </div>
   );
