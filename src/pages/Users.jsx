@@ -46,6 +46,31 @@ const Users = () => {
     fetchUsers();
   }, [currentUser]);
 
+  const handleFollow = async (userIdToFollow) => {
+    if (!currentUser) return;
+
+    try {
+      await setDoc(doc(db, 'followers', `${userIdToFollow}_${currentUser.uid}`), {
+        userId: userIdToFollow,
+        followerId: currentUser.uid,
+        displayName: currentUser.displayName,
+        email: currentUser.email
+      });
+
+      await setDoc(doc(db, 'following', `${currentUser.uid}_${userIdToFollow}`), {
+        userId: currentUser.uid,
+        followingId: userIdToFollow,
+        displayName: currentUser.displayName,
+        email: currentUser.email
+      });
+
+      setFollowedUsers([...followedUsers, userIdToFollow]);
+      alert('Followed successfully');
+    } catch (error) {
+      console.error('Error following user: ', error);
+    }
+  };
+
   return (
     <div className="max-w-xl mx-auto justify-between p-4 mt-12">
       {users.length > 0 ? (
@@ -64,6 +89,10 @@ const Users = () => {
                     </p>
                   </div>
                 </div>
+                <button
+                  onClick={() => handleFollow(user.id)}
+                >
+                </button>
               </div>
               <hr className="border-gray-300 mt-10" />
             </li>
