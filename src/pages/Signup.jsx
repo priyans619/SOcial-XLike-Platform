@@ -3,8 +3,8 @@ import AuthForm from '../components/AuthForm';
 
 const Signup = () => {
   return (
-    <div className="min-h-screen flex items-start justify-start ml-10">
-      <div className="w-full max-w-md p-8 space-y-8 bg-gray-50">
+    <div className="min-h-screen flex items-start justify-center ">
+      <div className="w-full max-w-md p-8 space-y-8 border-2 border-r-2 rounded-lg bg-gray-50 mt-14">
         <div>
           <h1 className="text-3xl font-bold text-left text-[#f07499]">TweetX</h1>
           <Link to="/login" className="mt-8 inline-block font-medium text-black py-2 px-16 border border-black rounded-xl">
