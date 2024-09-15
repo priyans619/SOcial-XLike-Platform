@@ -6,9 +6,10 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Feed from './pages/Feed';
 import Users from './pages/Users';
+import Profile from './pages/Profile';
 
 function App() {
-  const { currentUser, fetchCounts} = useAuth();
+  const { currentUser, fetchCounts, postCount } = useAuth();
 
   return (
     <AuthProvider>
@@ -32,6 +33,16 @@ function App() {
                   path="/users"
                   element={<Users />}
                 />
+                <Route
+                  path="/profile"
+                  element={
+                    <Profile
+                      postCount={postCount}
+                      fetchCounts={fetchCounts}
+                    />
+                  }
+                />
+                <Route path="*" element={<Navigate to="/feed" />} />
               </>
             )}
           </Routes>
