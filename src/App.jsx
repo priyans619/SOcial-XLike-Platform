@@ -5,9 +5,10 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Feed from './pages/Feed';
+import Users from './pages/Users';
 
 function App() {
-  const { currentUser, fetchCounts } = useAuth();
+  const { currentUser, fetchCounts} = useAuth();
 
   return (
     <AuthProvider>
@@ -27,7 +28,10 @@ function App() {
                   path="/feed"
                   element={<Feed fetchCounts={fetchCounts} />}
                 />
-                
+                <Route
+                  path="/users"
+                  element={<Users />}
+                />
               </>
             )}
           </Routes>
