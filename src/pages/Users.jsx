@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, query, where } from 'firebase/firestore';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [followedUsers, setFollowedUsers] = useState([]);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -29,7 +30,14 @@ const Users = () => {
         );
         setUsers(usersList.filter(user => user.id !== currentUser.uid)); // Exclude current user
 
-        
+        // Fetch followed users
+        const followedQuery = query(
+          collection(db, 'following'),
+          where('userId', '==', currentUser.uid)
+        );
+        const followedSnapshot = await getDocs(followedQuery);
+        const followedList = followedSnapshot.docs.map(doc => doc.data().followingId);
+        setFollowedUsers(followedList);
       } catch (error) {
         console.error('Error fetching users: ', error);
       }
